@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 
 namespace RWSTestGit
 {
+    using Swashbuckle.AspNetCore.Swagger;
+
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -29,6 +31,11 @@ namespace RWSTestGit
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "RWS Test API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +45,14 @@ namespace RWSTestGit
             loggerFactory.AddDebug();
 
             app.UseMvc();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUi(
+                c =>
+                    {
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    });
         }
     }
 }
